@@ -1,0 +1,30 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    username  String   @unique
+    password  String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Folder {
+    id        String    @id @default(auto()) @map("_id") @db.ObjectId
+    name      String
+    isFolder  Boolean   @default(true)
+    extension String?
+    content   String?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt
+    children  Folder[]  @relation("ParentChild")
+    parent    Folder?   @relation("ParentChild", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    parentId  String?   @db.ObjectId
+    userIds   String[]  @db.ObjectId
+}
