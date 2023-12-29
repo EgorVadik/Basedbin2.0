@@ -68,7 +68,8 @@ export const Editor = ({ room, session, language, content }: EditorProps) => {
                 editorRef.current = editor
                 const doc = new Y.Doc()
                 const provider = new WebsocketProvider(
-                    'ws://localhost:4000',
+                    'wss://basedbin3-0.onrender.com',
+                    // 'ws://localhost:4000',
                     // 'wss://demos.yjs.dev/ws',
                     room,
                     doc,
