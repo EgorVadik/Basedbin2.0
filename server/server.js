@@ -3,7 +3,6 @@ const WebSocket = require('ws')
 const http = require('http')
 const ywsUtils = require('y-websocket/bin/utils')
 const setupWSConnection = ywsUtils.setupWSConnection
-const docs = ywsUtils.docs
 
 const production = process.env.PRODUCTION != null
 const port = process.env.PORT || 4000
@@ -18,14 +17,6 @@ const server = http.createServer((request, response) => {
         )
         return
     }
-
-    // if (staticServer && !(request.url || '').startsWith('/ws/')) {
-    //     request
-    //         .addListener('end', () => {
-    //             staticServer.serve(request, response)
-    //         })
-    //         .resume()
-    // }
 })
 const wss = new WebSocket.Server({ server })
 
@@ -50,7 +41,7 @@ wss.on('connection', (conn, req) => {
 //     console.log(`${new Date().toISOString()} Stats: ${JSON.stringify(stats)}`)
 // }, 10000)
 
-server.listen(port, '0.0.0.0')
+server.listen(port)
 
 console.log(
     `Listening to http://localhost:${port} (${
