@@ -55,7 +55,7 @@ export const CreateAccount = () => {
                         toast.error('Invalid data please try again')
                         break
                     case 409:
-                        toast.error('Email already in use')
+                        toast.error('Username already in use')
                         break
 
                     default:
@@ -76,7 +76,7 @@ export const CreateAccount = () => {
                         Create an account
                     </CardTitle>
                     <CardDescription>
-                        Enter your email below to create your account
+                        Enter your username below to create your account
                     </CardDescription>
                 </CardHeader>
                 <CardContent className='grid gap-4'>

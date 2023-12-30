@@ -70,7 +70,7 @@ export const LoginAccount = () => {
                         Login to your account
                     </CardTitle>
                     <CardDescription>
-                        Enter your email below to login to your account
+                        Enter your username below to login to your account
                     </CardDescription>
                 </CardHeader>
                 <CardContent className='grid gap-4'>
@@ -79,7 +79,7 @@ export const LoginAccount = () => {
                         <Input
                             id='username'
                             type='username'
-                            placeholder='m@example.com'
+                            placeholder='John Doe'
                             {...register('username')}
                             className={cn({
                                 'border-red-500 dark:border-red-400':

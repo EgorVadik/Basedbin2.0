@@ -10,7 +10,7 @@ import { Session } from 'next-auth'
 import { COLORS, languages } from '@/lib/constants'
 import { useTheme } from 'next-themes'
 import { useAtom } from 'jotai'
-import { fileAtom } from '@/atoms'
+import { fileAtom, infoAtom } from '@/atoms'
 import { Loader2 } from 'lucide-react'
 import { useDebounce } from '@/hooks/use-debounce'
 import { saveContent } from '@/actions'
@@ -24,6 +24,7 @@ type EditorProps = {
 
 export const Editor = ({ room, session, language, content }: EditorProps) => {
     const [file, setFile] = useAtom(fileAtom)
+    const [, setInfo] = useAtom(infoAtom)
     const { theme, systemTheme } = useTheme()
     const editorRef = React.useRef<editor.IStandaloneCodeEditor | null>(null)
     const isDark =
@@ -99,17 +100,42 @@ export const Editor = ({ room, session, language, content }: EditorProps) => {
 
                     monacoBinding.awareness?.getStates().forEach((state) => {
                         const { user, cursor } = state
+                        const { username, color } = user
+                        const position = {
+                            lineNumber: cursor?.lineNumber ?? 0,
+                            column: cursor?.column ?? 0,
+                        }
+
+                        setInfo((prev) => {
+                            const currentUser = prev.find(
+                                (user) => user.username === username,
+                            )
+                            if (currentUser == null) {
+                                return [
+                                    ...prev,
+                                    {
+                                        username,
+                                        lineNumber: position.lineNumber,
+                                    },
+                                ]
+                            }
+
+                            return prev.map((user) => {
+                                if (user.username === username) {
+                                    return {
+                                        ...user,
+                                        lineNumber: position.lineNumber,
+                                    }
+                                }
+                                return user
+                            })
+                        })
+
                         if (
                             user != null &&
                             cursor != null &&
                             session.user?.username !== user.username
                         ) {
-                            const { username, color } = user
-                            const position = {
-                                lineNumber: cursor.lineNumber ?? 0,
-                                column: cursor.column ?? 0,
-                            }
-
                             const decorationId = editorRef.current
                                 ?.getModel()
                                 ?.deltaDecorations(

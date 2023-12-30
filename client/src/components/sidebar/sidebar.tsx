@@ -1,4 +1,4 @@
-import { Bot, Copy, HomeIcon, UserCircle } from 'lucide-react'
+import { Bot, Copy, HomeIcon, Info, UserCircle } from 'lucide-react'
 import React from 'react'
 import { ThemeButton } from '../buttons/theme-button'
 import { TooltipWrapper } from '../wrappers/tooltip-wrapper'
@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation'
 import { Button, buttonVariants } from '../ui/button'
 import { copyToClipboard } from '@/lib/utils'
 import { ChatPopover } from '../popovers/chat-popover'
+import { InfoPopover } from '../popovers/info-popover'
 
 export const Sidebar = () => {
     const { data: session } = useSession()
@@ -30,17 +31,27 @@ export const Sidebar = () => {
 
             <div className='flex flex-col items-center gap-2'>
                 {pathname.length > 2 && (
-                    <TooltipWrapper text='Copy Room ID' side='right'>
-                        <Button
-                            variant='ghost'
-                            size='icon'
-                            onClick={() =>
-                                copyToClipboard(pathname.at(-1) ?? '')
-                            }
-                        >
-                            <Copy size={24} />
-                        </Button>
-                    </TooltipWrapper>
+                    <>
+                        <InfoPopover>
+                            <TooltipWrapper text='Room Info' side='right'>
+                                <Button variant='ghost' size='icon'>
+                                    <Info size={24} />
+                                </Button>
+                            </TooltipWrapper>
+                        </InfoPopover>
+
+                        <TooltipWrapper text='Copy Room ID' side='right'>
+                            <Button
+                                variant='ghost'
+                                size='icon'
+                                onClick={() =>
+                                    copyToClipboard(pathname.at(-1) ?? '')
+                                }
+                            >
+                                <Copy size={24} />
+                            </Button>
+                        </TooltipWrapper>
+                    </>
                 )}
                 {session != null && (
                     <>

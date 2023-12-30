@@ -33,10 +33,7 @@ export const FolderComponent = ({ folder, userId }: FolderComponentProps) => {
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                             >
-                                <AccordionItem
-                                    value={folder.id}
-                                    // className='px-2'
-                                >
+                                <AccordionItem value={folder.id}>
                                     <div className='flex items-center justify-between gap-2'>
                                         <AccordionTrigger className='gap-1 truncate whitespace-nowrap'>
                                             {folder.name}
