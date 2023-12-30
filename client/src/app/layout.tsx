@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { getServerAuthSession } from '@/server/auth'
 import { nestedChildrenLoop } from '@/lib/constants'
 import { prisma } from '@/server/db'
+import { Analytics } from '@vercel/analytics/react'
 
 export const metadata: Metadata = {
     title: 'Basedbin',
@@ -63,6 +64,7 @@ export default async function RootLayout({
                 <ClientProviders folders={session == null ? [] : folders ?? []}>
                     {children}
                     <Toaster />
+                    <Analytics />
                 </ClientProviders>
             </body>
         </html>
