@@ -12,8 +12,8 @@ import { useTheme } from 'next-themes'
 import { useAtom } from 'jotai'
 import { fileAtom, infoAtom } from '@/atoms'
 import { Loader2 } from 'lucide-react'
-import { useDebounce } from '@/hooks/use-debounce'
-import { saveContent } from '@/actions'
+// import { useDebounce } from '@/hooks/use-debounce'
+// import { saveContent } from '@/actions'
 
 type EditorProps = {
     room: string
@@ -30,13 +30,13 @@ export const Editor = ({ room, session, language, content }: EditorProps) => {
     const isDark =
         theme === 'dark' || (theme === 'system' && systemTheme === 'dark')
 
-    useDebounce({
-        effect: async () => {
-            await saveContent(room, file.content ?? '')
-        },
-        delay: 10000,
-        deps: [file],
-    })
+    // useDebounce({
+    //     effect: async () => {
+    //         await saveContent(room, file.content ?? '')
+    //     },
+    //     delay: 10000,
+    //     deps: [file],
+    // })
 
     useEffect(() => {
         setFile((prev) => {
@@ -49,7 +49,6 @@ export const Editor = ({ room, session, language, content }: EditorProps) => {
 
     return (
         <EditorComponent
-            defaultValue={content.length > 0 ? content : undefined}
             loading={<Loader2 className='h-20 w-20 animate-spin' />}
             height='100%'
             defaultLanguage={

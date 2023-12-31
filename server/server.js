@@ -1,7 +1,9 @@
 require('dotenv').config()
 const WebSocket = require('ws')
 const http = require('http')
+const Y = require('yjs')
 const ywsUtils = require('y-websocket/bin/utils')
+const { MongodbPersistence } = require('y-mongodb-provider')
 const setupWSConnection = ywsUtils.setupWSConnection
 
 const production = process.env.PRODUCTION != null
@@ -24,6 +26,28 @@ wss.on('connection', (conn, req) => {
     setupWSConnection(conn, req, {
         gc: req.url.slice(1) !== 'ws/prosemirror-versions',
     })
+})
+
+const mdb = new MongodbPersistence(process.env.DATABASE_URL, {
+    flushSize: 100,
+    multipleCollections: true,
+})
+
+ywsUtils.setPersistence({
+    bindState: async (docName, ydoc) => {
+        const persistedYdoc = await mdb.getYDoc(docName)
+        const newUpdates = Y.encodeStateAsUpdate(ydoc)
+        mdb.storeUpdate(docName, newUpdates)
+        Y.applyUpdate(ydoc, Y.encodeStateAsUpdate(persistedYdoc))
+        ydoc.on('update', async (update) => {
+            mdb.storeUpdate(docName, update)
+        })
+    },
+    writeState: async () => {
+        return new Promise((resolve) => {
+            resolve()
+        })
+    },
 })
 
 // log some stats

@@ -33,8 +33,8 @@ const AccordionTrigger = React.forwardRef<
       )}
       {...props}
     >
-      <span className="truncate block max-sm:max-w-[15ch]">{children}</span>
       <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
+      <span className="truncate block max-sm:max-w-[15ch]">{children}</span>
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ))

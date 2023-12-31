@@ -4,7 +4,7 @@ import { FolderAccordion } from '../folders/folder-accordion'
 import { Folder } from '@/types'
 import { Accordion } from '../ui/accordion'
 import { Session } from 'next-auth'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { ScrollArea } from '../ui/scroll-area'
 
 type FolderWrapperProps = {
     folders: Folder[]
@@ -27,12 +27,8 @@ export const FolderWrapper = ({ folders, session }: FolderWrapperProps) => {
     const rootFolder = groupBy(folders, 'parentId')['root']
 
     return (
-        <DragDropContext
-            onDragEnd={(res) => {
-                console.log(res)
-            }}
-        >
-            <Accordion type='multiple' className='grow px-3'>
+        <Accordion type='multiple' className='grow px-3'>
+            <ScrollArea className='h-screen flex-grow'>
                 {rootFolder?.map((folder) => (
                     <FolderAccordion
                         key={folder.id}
@@ -40,7 +36,7 @@ export const FolderWrapper = ({ folders, session }: FolderWrapperProps) => {
                         userId={session.user.id}
                     />
                 ))}
-            </Accordion>
-        </DragDropContext>
+            </ScrollArea>
+        </Accordion>
     )
 }

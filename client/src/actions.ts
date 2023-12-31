@@ -200,3 +200,33 @@ export const saveContent = async (fileId: string, content: string) => {
         }
     }
 }
+
+export const reorderFile = async (fileId: string, parentId: string) => {
+    const session = await getServerAuthSession()
+    if (!session)
+        return {
+            error: 'Please login to reorder a file',
+            data: null,
+        }
+
+    try {
+        const file = await prisma.folder.update({
+            where: {
+                id: fileId,
+            },
+            data: {
+                parentId,
+            },
+        })
+
+        return {
+            error: null,
+            data: file,
+        }
+    } catch (error) {
+        return {
+            error: (error as Error).message,
+            data: null,
+        }
+    }
+}
