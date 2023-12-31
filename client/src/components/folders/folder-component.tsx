@@ -14,6 +14,7 @@ import { Folder } from '@/types'
 import { useRouter } from 'next/navigation'
 import { useDrop } from 'react-dnd'
 import { cn } from '@/lib/utils'
+import { DeletePopover } from '../popovers/delete-popover'
 
 type FolderComponentProps = {
     folder: Folder
@@ -84,22 +85,15 @@ export const FolderComponent = ({ folder, userId }: FolderComponentProps) => {
                                 <FolderPlus size={16} />
                             </Button>
                         </NewFilePopover>
-                        <Button
-                            variant={'destructive'}
-                            size={'icon'}
-                            className='h-6 w-6'
-                            onClick={async () => {
-                                const { error } = await deleteFile(folder.id)
-                                if (error) {
-                                    toast.error(error)
-                                    return
-                                }
-                                toast.success('File deleted')
-                                router.refresh()
-                            }}
-                        >
-                            <Trash size={16} />
-                        </Button>
+                        <DeletePopover folderId={folder.id}>
+                            <Button
+                                variant={'destructive'}
+                                size={'icon'}
+                                className='h-6 w-6'
+                            >
+                                <Trash size={16} />
+                            </Button>
+                        </DeletePopover>
                     </div>
                 </div>
                 <AccordionContent className={'pl-4'}>

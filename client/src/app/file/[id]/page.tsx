@@ -20,18 +20,18 @@ export default async function page({
         return notFound()
     }
 
-    if (!file.userIds.includes(session.user.id)) {
-        await prisma.folder.update({
-            where: {
-                id: room,
-            },
-            data: {
-                userIds: {
-                    push: session.user.id,
-                },
-            },
-        })
-    }
+    // if (!file.userIds.includes(session.user.id)) {
+    //     await prisma.folder.update({
+    //         where: {
+    //             id: room,
+    //         },
+    //         data: {
+    //             userIds: {
+    //                 push: session.user.id,
+    //             },
+    //         },
+    //     })
+    // }
 
     return (
         <Editor

@@ -26,7 +26,11 @@ export const createFile = async (fileName: string, parentId?: string) => {
                         ? fileName.split('.').pop()
                         : 'md',
                 userIds: {
-                    set: [session.user.id],
+                    set: [
+                        {
+                            userId: session.user.id,
+                        },
+                    ],
                 },
             },
         })
@@ -58,7 +62,11 @@ export const createFolder = async (folderName: string, parentId?: string) => {
                 name: folderName,
                 parentId,
                 userIds: {
-                    set: [session.user.id],
+                    set: [
+                        {
+                            userId: session.user.id,
+                        },
+                    ],
                 },
             },
         })
@@ -96,26 +104,32 @@ export const deleteFile = async (fileId: string) => {
                 data: null,
             }
 
-        const filteredIds = file.userIds.filter((id) => id !== session.user.id)
-
-        if (filteredIds.length === 0) {
-            await prisma.folder.delete({
-                where: {
-                    id: fileId,
-                },
-            })
-        } else {
-            await prisma.folder.update({
-                where: {
-                    id: fileId,
-                },
-                data: {
-                    userIds: {
-                        set: filteredIds,
-                    },
-                },
-            })
+        if (file.isFolder) {
+            await deleteFolderWithChildren(fileId)
+            return {
+                error: null,
+                data: null,
+            }
         }
+
+        const filteredIds = file.userIds.map((user) => {
+            if (user.userId !== session.user.id) return user
+            return {
+                userId: user.userId,
+                isDeleted: true,
+            }
+        })
+
+        await prisma.folder.update({
+            where: {
+                id: fileId,
+            },
+            data: {
+                userIds: {
+                    set: filteredIds,
+                },
+            },
+        })
 
         return {
             error: null,
@@ -127,6 +141,34 @@ export const deleteFile = async (fileId: string) => {
             data: null,
         }
     }
+}
+
+const deleteFolderWithChildren = async (folderId: string) => {
+    const session = await getServerAuthSession()
+    const children = await prisma.folder.findMany({
+        where: { parentId: folderId },
+    })
+
+    for (const child of children) {
+        await deleteFolderWithChildren(child.id)
+    }
+
+    await prisma.folder.update({
+        where: { id: folderId },
+        data: {
+            userIds: {
+                updateMany: {
+                    where: {
+                        userId: session?.user.id,
+                        isDeleted: false,
+                    },
+                    data: {
+                        isDeleted: true,
+                    },
+                },
+            },
+        },
+    })
 }
 
 export const joinFile = async (fileId: string) => {
@@ -144,7 +186,9 @@ export const joinFile = async (fileId: string) => {
             },
             data: {
                 userIds: {
-                    push: session.user.id,
+                    push: {
+                        userId: session.user.id,
+                    },
                 },
             },
         })

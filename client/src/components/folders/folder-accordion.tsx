@@ -13,7 +13,11 @@ type FolderAccordionProps = {
 export const FolderAccordion = ({ folder, userId }: FolderAccordionProps) => {
     const pathname = usePathname().split('/')
 
-    if (!folder.userIds.includes(userId)) {
+    if (
+        !folder.userIds.some(
+            (user) => user.userId === userId && user.isDeleted === false,
+        )
+    ) {
         return null
     }
 

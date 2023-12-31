@@ -16,15 +16,20 @@ model User {
 }
 
 model Folder {
-    id        String    @id @default(auto()) @map("_id") @db.ObjectId
+    id        String       @id @default(auto()) @map("_id") @db.ObjectId
     name      String
-    isFolder  Boolean   @default(true)
+    isFolder  Boolean      @default(true)
     extension String?
     content   String?
-    createdAt DateTime  @default(now())
-    updatedAt DateTime? @updatedAt
-    children  Folder[]  @relation("ParentChild")
-    parent    Folder?   @relation("ParentChild", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    parentId  String?   @db.ObjectId
-    userIds   String[]  @db.ObjectId
+    createdAt DateTime     @default(now())
+    updatedAt DateTime?    @updatedAt
+    children  Folder[]     @relation("ParentChild")
+    parent    Folder?      @relation("ParentChild", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    parentId  String?      @db.ObjectId
+    userIds   UserFolder[]
+}
+
+type UserFolder {
+    userId    String  @db.ObjectId
+    isDeleted Boolean @default(false)
 }

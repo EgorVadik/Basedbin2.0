@@ -49,7 +49,10 @@ export default async function RootLayout({
             ? await prisma.folder.findMany({
                   where: {
                       userIds: {
-                          has: session?.user?.id,
+                          some: {
+                              userId: session.user.id,
+                              isDeleted: false,
+                          },
                       },
                   },
                   include: {
