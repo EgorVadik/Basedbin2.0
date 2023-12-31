@@ -26,8 +26,6 @@ const groupBy = (xs: Folder[], key: 'parentId') => {
 export const FolderWrapper = ({ folders, session }: FolderWrapperProps) => {
     const rootFolder = groupBy(folders, 'parentId')['root']
 
-    console.log(rootFolder)
-
     return (
         <Accordion type='multiple' className='grow px-3'>
             <ScrollArea className='h-screen flex-grow'>
