@@ -64,7 +64,6 @@ export default async function RootLayout({
     return (
         <html lang='en'>
             <body className={GeistMono.className}>
-                {/* // @ts-ignore */}
                 <ClientProviders folders={session == null ? [] : folders ?? []}>
                     {children}
                     <Toaster />
