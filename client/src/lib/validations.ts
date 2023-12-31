@@ -1,7 +1,9 @@
 import { z } from 'zod'
 
 export const loginSchema = z.object({
-    username: z.string().email(),
+    username: z.string().min(2, {
+        message: 'Username must contain at least 2 characters',
+    }),
     password: z.string().min(6, {
         message: 'Password must contain at least 6 characters',
     }),
@@ -28,7 +30,7 @@ export const registerSchema = z
         {
             message: 'Passwords must match',
             path: ['confirmPassword'],
-        }
+        },
     )
 
 export type RegisterSchema = z.infer<typeof registerSchema>
