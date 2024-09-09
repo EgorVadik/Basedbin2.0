@@ -39,7 +39,7 @@ export const RequestListener = ({ documentId }: { documentId: string }) => {
         return () => {
             accessRequests.unsubscribe()
         }
-    }, [])
+    }, [documentId, router])
 
     return <></>
 }

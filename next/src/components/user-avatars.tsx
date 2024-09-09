@@ -26,7 +26,6 @@ import { ThemeToggle } from './theme/theme-toggle'
 import { useMediaQuery } from '@mantine/hooks'
 // import Link from 'next/link'
 // import { buttonVariants } from './ui/button'
-import { usePathname } from 'next/navigation'
 
 export const UserAvatars = ({
     documentId,
@@ -37,7 +36,6 @@ export const UserAvatars = ({
     isOwner: boolean
     user: User
 }) => {
-    const pathName = usePathname()
     const matches = useMediaQuery('(min-width: 768px)')
     const broadcast = useBroadcastEvent()
     const [loading, setLoading] = useState(false)
