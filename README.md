@@ -4,12 +4,10 @@ An inspiration of [hastebin](https://hastebin.skyra.pw/) but with a twist, provi
 
 ## Getting Started
 
-(_Both server and client_)
-
 Clone the project
 
 ```bash
-  git clone https://github.com/EgorVadik/basedbin2.0.git
+  git clone https://github.com/EgorVadik/basedbin3.0.git
 ```
 
 Go to the project directory
@@ -24,7 +22,7 @@ Install dependencies
   npm install
 ```
 
-Start the nextjs server
+Start the nextjs server `(cd /basedbin3.0/next)`
 
 ```bash
     npm run dev
@@ -35,12 +33,6 @@ or
 ```bash
     npm run build
     npm run start
-```
-
-Start the socket server
-
-```bash
-  npm run start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
